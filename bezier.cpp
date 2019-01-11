@@ -68,29 +68,27 @@ void Bezier::dumpControlPoints()
 *	Returns a Point object with coordinates at a particular station 
 *	  on the Bezier Curve given by t.
 */
-cv::Point Bezier::getPoint(int t)
+cv::Point Bezier::getPoint(int t, int tMax)
 {
 	cv::Point pt;
 
- 	int splineCount = m_controlPointsCnt/4;
- 	int currSpline = (int) ((t/1000.0f) * (float) splineCount);
- 	int splineShare = 1000/splineCount;
- 	float step = (t % splineShare) / (float)splineShare;
- 	int CP[2][4];
+ 	float step = (float) t / (float) tMax;
+
+ 	float CP[2][4];
  	
-	for (int i = currSpline*4; i < (currSpline+1)*4; i++)
+	for (int i = 0; i < 4; i++)
 	{
-		CP[0][i] = (int) m_controlPoints->at<float>(0, i);
-		CP[1][i] = (int) m_controlPoints->at<float>(1, i);
-	}
+		CP[0][i] = m_controlPoints->at<float>(0, i);
+		CP[1][i] = m_controlPoints->at<float>(1, i);
+	}	
+
+	float cx = 3.f * (CP[0][1] - CP[0][0]);
+	float bx = 3.f * (CP[0][2] - CP[0][1]) - cx;
+	float ax = CP[0][3] - CP[0][0] - cx - bx;
 	
-	int cx = 3 * (CP[0][1] - CP[0][0]);
-	int bx = 3 * (CP[0][2] - CP[0][1]) - cx;
-	int ax = CP[0][3] - CP[0][0] - cx - bx;
-	
-	int cy = 3 * (CP[1][1] - CP[1][0]);
-	int by = 3 * (CP[1][2] - CP[1][1]) - cy;
-	int ay = CP[1][3] - CP[1][0] - cy - by;
+	float cy = 3.f * (CP[1][1] - CP[1][0]);
+	float by = 3.f * (CP[1][2] - CP[1][1]) - cy;
+	float ay = CP[1][3] - CP[1][0] - cy - by;
 
 	pt.x = (int) (ax*step*step*step + bx*step*step + cx*step + CP[0][0]);
 	pt.y = (int) (ay*step*step*step + by*step*step + cy*step + CP[1][0]);

@@ -13,7 +13,7 @@ int main(int argc, char* argv[])
 	// Control points 
 	float cp_init[2 * 4] = {
 		// X
-		200.0, 200.0, 250.0, 250.0,
+		20.0, 209.0, 133.0, 357.0,
 		// Y
 		150.0, 300.0, 200.0, 350.0
 		};
@@ -23,15 +23,18 @@ int main(int argc, char* argv[])
     cv::Mat canvas(400, 400, CV_8UC3);
 
 	// Draw curve
-	for (int t = 0; t < 1000; t++)
+	int tMax = 1000;
+	for (int t = 0; t < tMax; t++)
 	{
-		cv::Point p = bezierCurve.getPoint(t);
+		cv::Point p = bezierCurve.getPoint(t, tMax);
 		
 		if (p.y > 500 || p.y < 0) p.y = 0;
 		if (p.x > 500 || p.x < 0) p.x = 0;
         //std::cout << "X: " << p.x << "     Y: " << p.y << "\n";
 		
-        canvas.at<int>(p.x, p.y) = 255;
+		// FIXME: how to align (x,y) with CV_8UC3?
+        //canvas.at<int>(p.y, p.x) = 255;
+        circle(canvas, p, 1., cv::Scalar(200,200,200), 1, 8);
 	}
 	
     // Draw control points

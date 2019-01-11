@@ -9,7 +9,7 @@ class Bezier
 {
 public:
 	Bezier();
-	cv::Point getPoint(int t);
+	cv::Point getPoint(int t, int tMax);
 
 	void setControlPoints(float* input);
 	int getControlPointsCnt();
