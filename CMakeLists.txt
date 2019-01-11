@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8)
 
 PROJECT( cubicBezierCurve )
 
+set (CMAKE_CXX_STANDARD 11)
+
 # Make sure the compiler can find include files from our library. 
 include_directories (/usr/local/include/opencv2) 
 include_directories (/usr/local/include) 
